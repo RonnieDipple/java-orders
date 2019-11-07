@@ -1,6 +1,10 @@
 package com.lambdaschool.demo.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /* AGENTS
  * AGENTCODE primary key, not null Long
@@ -32,6 +36,10 @@ public class Agents {
         this.phone = phone;
         this.country = country;
     }
+
+    @OneToMany(mappedBy = "agent", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("agent")
+    private List<Customers> customers = new ArrayList<>();
 
     public Agents(){
         //silly default constructor that you must use, why oh why java

@@ -41,11 +41,15 @@ public class Customers {
     private String phone;
 
     // AGENTCODE Long foreign key (one agent to many customers) not null
-    @OneToMany(mappedBy = "agentCode",
-    cascade = CascadeType.ALL,
-    orphanRemoval = true)
-    @JsonIgnoreProperties("agentCode")
-    private List<Customers> customers = new ArrayList<>();
+    @ManyToOne
+    @JoinColumn(name = "agentcode", nullable = false)
+    @JsonIgnoreProperties("customers")
+    private Agents agent;
+
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("customer")
+    private List<Orders> orders = new ArrayList<>();
+
 
 
     public Customers(){
@@ -73,7 +77,7 @@ public class Customers {
         this.paymentAmt = paymentAmt;
         this.outstandingAmt = outstandingAmt;
         this.phone = phone;
-        this.customers = customers;
+
     }
 
     public long getCustCode() {
@@ -164,11 +168,5 @@ public class Customers {
         this.phone = phone;
     }
 
-    public List<Customers> getCustomers() {
-        return customers;
-    }
 
-    public void setCustomers(List<Customers> customers) {
-        this.customers = customers;
-    }
 }
