@@ -16,57 +16,57 @@ import java.util.List;
 
 @Entity //Means it will become a table
 @Table(name = "agents")//names the table
-public class Agents {
+public class Agent {
 
     //every table will have a primary, it identifies the row, make the key length large
     @Id//makes it the primary key
     @GeneratedValue(strategy = GenerationType.AUTO)//Generates the key
-    private long agentCode;
+    private long agentcode;
 
-    private String agentName;
-    private String workingArea;
+    private String agentname; //I HATE THIS NAMING CONVENTION BUT I GUESS IT IS WHAT IT IS
+    private String workingarea;
     private double commission;
     private String phone;
     private String country;
 
-    public Agents(String agentName, String workingArea, double commission, String phone, String country) {
-        this.agentName = agentName;
-        this.workingArea = workingArea;
+    @OneToMany(mappedBy = "agent", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("agent")
+    private List<Customer> customers = new ArrayList<>();
+
+    public Agent(){
+        //silly default constructor that you must use, why oh why java
+    }
+
+    public Agent(String agentname, String workingarea, double commission, String phone, String country) {
+        this.agentname = agentname;
+        this.workingarea = workingarea;
         this.commission = commission;
         this.phone = phone;
         this.country = country;
     }
 
-    @OneToMany(mappedBy = "agent", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties("agent")
-    private List<Customers> customers = new ArrayList<>();
-
-    public Agents(){
-        //silly default constructor that you must use, why oh why java
+    public long getAgentcode() {
+        return agentcode;
     }
 
-    public long getAgentCode() {
-        return agentCode;
+    public void setAgentcode(long agentcode) {
+        this.agentcode = agentcode;
     }
 
-    public void setAgentCode(long agentCode) {
-        this.agentCode = agentCode;
+    public String getAgentname() {
+        return agentname;
     }
 
-    public String getAgentName() {
-        return agentName;
+    public void setAgentname(String agentname) {
+        this.agentname = agentname;
     }
 
-    public void setAgentName(String agentName) {
-        this.agentName = agentName;
+    public String getWorkingarea() {
+        return workingarea;
     }
 
-    public String getWorkingArea() {
-        return workingArea;
-    }
-
-    public void setWorkingArea(String workingArea) {
-        this.workingArea = workingArea;
+    public void setWorkingarea(String workingarea) {
+        this.workingarea = workingarea;
     }
 
     public double getCommission() {
@@ -91,5 +91,13 @@ public class Agents {
 
     public void setCountry(String country) {
         this.country = country;
+    }
+
+    public List<Customer> getCustomers() {
+        return customers;
+    }
+
+    public void setCustomers(List<Customer> customers) {
+        this.customers = customers;
     }
 }

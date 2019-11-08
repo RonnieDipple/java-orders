@@ -1,7 +1,8 @@
 package com.lambdaschool.demo.controllers;
 
-import com.lambdaschool.demo.models.Customers;
-import com.lambdaschool.demo.services.CustomersService;
+import com.lambdaschool.demo.models.Customer;
+import com.lambdaschool.demo.services.CustomerService;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,24 +14,30 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/customers")
-public class CustomersController {
+public class CustomerController {
+    private CustomerService customerService;
 
-private CustomersService customersService;
+    //this caused me hell
+    public CustomerController(@Qualifier("customerService") CustomerService customerService) {
+        this.customerService = customerService;
+    }
+
     @GetMapping(value = "/customer/{id}", produces = {"application/json"})
     public ResponseEntity<?> getCustomerById(@PathVariable long id) {
-        Customers myCustomer = customersService.findCustomersById(id);
+        Customer myCustomer = customerService.getCustomerById(id);
         return new ResponseEntity<>(myCustomer, HttpStatus.OK);
     }
 
+
     @GetMapping(value = "/orders", produces = {"application/json"})
     public ResponseEntity<?> getAllCustomers() {
-        List<Customers> myCustomers = customersService.findAllCustomers();
+        List<Customer> myCustomers = customerService.getAllCustomers();
         return new ResponseEntity<>(myCustomers, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/namelike/{nameLike}", produces = {"application/json"})
-    public ResponseEntity<?> getCustomersByNameLike(@PathVariable String nameLike) {
-        List<Customers> myCustomers = customersService.findByNameLike(nameLike);
+    @GetMapping(value = "/namelike/{namelike}", produces = {"application/json"})
+    public ResponseEntity<?> getCustomersByNameLike(@PathVariable String namelike) {
+        List<Customer> myCustomers = customerService.getCustomerByNameLike(namelike);
         return new ResponseEntity<>(myCustomers, HttpStatus.OK);
     }
 

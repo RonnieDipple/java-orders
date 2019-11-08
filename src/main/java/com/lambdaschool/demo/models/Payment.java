@@ -6,26 +6,26 @@ import java.util.List;
 
 @Entity
 @Table(name = "payments")
-public class Payments
-{
+public class Payment {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long paymentid;
 
-    @Column(nullable = false,
-            unique = true)
+    @Column(nullable = false)
     private String type;
 
     @ManyToMany
-    @JoinTable(name = "orderspayments", joinColumns = @JoinColumn(name = "paymentid"),
+    @JoinTable(name = "orderspayments",
+            joinColumns = @JoinColumn(name = "paymentid"),
             inverseJoinColumns = @JoinColumn(name = "ordnum"))
-    List<Orders> orders = new ArrayList<>();
+    List<Order> orders = new ArrayList<>();
 
-    public Payments(){
+    public Payment(){
 
     }
 
-    public Payments(String type, List<Customers> customersList) {
+    public Payment(String type, List<Customer> customerList) {
         this.type = type;
 
     }
